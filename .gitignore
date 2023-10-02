@@ -1,0 +1,10 @@
+
+# Operator-sdk
+bin/*
+cover.out
+
+# editor and IDE paraphernalia
+.idea
+*.swp
+*.swo
+*~
