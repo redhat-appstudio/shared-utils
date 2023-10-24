@@ -18,6 +18,15 @@ package tekton
 
 import tektonv1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1"
 
+// Param defines the parameters for a given resolver in PipelineRef
+type Param struct {
+	// Name is the name of the parameter
+	Name string `json:"name"`
+
+	// Value is the value of the parameter
+	Value string `json:"value"`
+}
+
 // PipelineRef represents a reference to a Pipeline using a resolver.
 // +kubebuilder:object:generate=true
 type PipelineRef struct {
@@ -28,13 +37,19 @@ type PipelineRef struct {
 	Params []Param `json:"params"`
 }
 
-// Param defines the parameters for a given resolver in PipelineRef
-type Param struct {
-	// Name is the name of the parameter
-	Name string `json:"name"`
+// Pipeline contains a reference to a Pipeline and the name of the service account to use while executing it.
+// +kubebuilder:object:generate=true
+type Pipeline struct {
+	PipelineRef        PipelineRef `json:"pipelineRef"`
+	ServiceAccountName string      `json:"serviceAccountName,omitempty"`
+}
 
-	// Value is the value of the parameter
-	Value string `json:"value"`
+// ParametrizedPipeline is an extension of the Pipeline struct, adding an array of parameters that will be passed to
+// the Pipeline.
+// +kubebuilder:object:generate=true
+type ParametrizedPipeline struct {
+	Pipeline
+	Params []Param `json:"params,omitempty"`
 }
 
 // ToTektonPipelineRef converts a PipelineRef object to Tekton's own PipelineRef type and returns it.
